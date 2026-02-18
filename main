@@ -1,4 +1,4 @@
-module double_dabble #(
+main double_dabble #(
 
 parameter n = 8,
 parameter m = 3 // ceil(log10(2^n-1)) = ceil(log10(2^n)) = ceil(n*log10(2))
