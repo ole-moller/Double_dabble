@@ -7,7 +7,7 @@ input clk,
 input resetn,
 input oe,
 input [n-1:0] bin,              // Binary input to be converted
-output wire [7:0] bcd_tens_ones,// Two lower bcd digit outputs for testing
+output wire [7:0] bcd_tens_ones,// Two lower BCD digit outputs for testing
 output wire [6:0] segments,     // 7-segment outputs
 output wire separator);         // Decimal point separates groups of BCD digits
    
@@ -58,7 +58,7 @@ localparam idle = 2'b00, hundreds = 2'b01, tens = 2'b10, ones = 2'b11;
 reg [1:0] state, next_state;
 wire [3:0] bcd_digit;
 
-// Proceed to next state or reset
+// Proceed to next state or idle on reset
 always @(posedge clk4 or negedge resetn) begin
     if (!resetn)
         state <= idle;
