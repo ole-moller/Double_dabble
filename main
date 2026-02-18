@@ -1,0 +1,117 @@
+module double_dabble #(
+
+parameter n = 8,
+parameter m = 3 // ceil(log10(2^n-1)) = ceil(log10(2^n)) = ceil(n*log10(2))
+)(
+input clk,
+input resetn,
+input oe,
+input [n-1:0] bin,              // Binary input to be converted
+output wire [7:0] bcd_tens_ones,// Two lower bcd digit outputs for testing
+output wire [6:0] segments,     // 7-segment outputs
+output wire separator);         // Decimal point separates groups of BCD digits
+   
+assign oe = 1;                  // Bidirectional is always output
+   
+reg [4*m-1:0] bcd_reg [0:n];
+assign bcd_reg[0][4*m-1:0] = 0;
+  
+// Outer loop for bits from bin input
+genvar i,j;
+generate
+    for (i = 0; i < n; i = i + 1)
+        begin : outer_loop
+        reg [4*m-1:0] temp_bcd;
+        reg [3:0] corr_digit;
+        // Inner loop for bcd digits
+        for (j = 0; j < m; j = j + 1)
+            begin : inner_loop
+            // Add 3 if bcd digit greater than or equal to 5.
+            // This corresponds to adding 6 after left shift.
+            // This is the offset between decimal and hexadecimal representation.
+            if (bcd_reg[i][4*j+3:4*j] >= 4'd5)
+                assign corr_digit = 4'd3; else
+                assign corr_digit = 4'd0;
+            assign temp_bcd[4*j+3:4*j] = bcd_reg[i][4*j+3:4*j] + corr_digit;
+            end
+        assign bcd_reg[i+1] = {temp_bcd[4*m-2:0], bin[n-1-i]};
+    end
+endgenerate
+   
+assign bcd = bcd_reg[n];
+assign bcd_tens_ones = bcd[7:0];
+
+// Divide clock by 4
+always @ (posedge clk or negedge resetn)
+    begin
+    clk2 <= !clk2 & !resetn;
+    clk4 <= !(clk2 ^ clk4) & !resetn;
+    end
+
+// Detect change in bin input
+reg bin_change;
+always @(posedge clk4) next_bin <= bin;
+assign bin_change = (bin != next_bin);
+
+// States and state variables
+localparam idle = 2'b00, hundreds = 2'b01, tens = 2'b10, ones = 2'b11;
+reg [1:0] state, next_state;
+wire [3:0] bcd_digit;
+
+// Proceed to next state or reset
+always @(posedge clk4 or negedge resetn) begin
+    if (!resetn)
+        state <= idle;
+    else
+        state <= next_state;
+    end
+
+// Select next state
+always @(*) begin
+    case (state)
+        idle:     if (bin_change) next_state = hundreds; else next_state = idle;
+        hundreds: next_state = tens;
+        tens:     next_state = ones;
+        ones:     next_state = idle;
+    endcase
+    end
+
+//Select BCD digit to display
+always @(*) begin
+    case (state)
+        idle:     bcd_digit = 4'b0000;
+        hundreds: bcd_digit = bcd[11:8];
+        tens:     bcd_digit = bcd[ 7:4];
+        ones:     bcd_digit = bcd[ 3:0];
+    endcase
+    end
+
+// 7-segment decoding of digits
+reg [6:0] digit [15:0];
+initial begin
+//Segment      gfedcba
+digit[0]  = 7'b0111111; // zero
+digit[1]  = 7'b0000110; // one
+digit[2]  = 7'b1011011; // two
+digit[3]  = 7'b1001111; // three
+digit[4]  = 7'b1100110; // four
+digit[5]  = 7'b1101101; // five
+digit[6]  = 7'b1111101; // six
+digit[7]  = 7'b0000111; // seven
+digit[8]  = 7'b1111111; // eight
+digit[9]  = 7'b1101111; // nine
+digit[10] = 7'b1110111; // ten (A)
+digit[11] = 7'b1111100; // eleven (b)
+digit[12] = 7'b0111001; // twelve (C)
+digit[13] = 7'b1011110; // thirteen (d)
+digit[14] = 7'b1111001; // fourteen (E)
+digit[15] = 7'b1110001; // fifteen (F)
+end
+
+// Output to 7-segment display with decimal point that separates groups of sequential BCD digits
+assign separator = (state == idle);
+if (separator)
+    assign segments = 7'b0000000; else
+    assign segments = digit[bcd_digit];
+
+endmodule
