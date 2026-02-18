@@ -49,9 +49,9 @@ always @ (posedge clk or negedge resetn)
     end
 
 // Detect change in bin input
-reg bin_change;
-always @(posedge clk4) next_bin <= bin;
-assign bin_change = (bin != next_bin);
+// reg bin_change;
+// always @(posedge clk4) next_bin <= bin;
+// assign bin_change = (bin != next_bin);
 
 // States and state variables
 localparam idle = 2'b00, hundreds = 2'b01, tens = 2'b10, ones = 2'b11;
@@ -69,7 +69,7 @@ always @(posedge clk4 or negedge resetn) begin
 // Select next state
 always @(*) begin
     case (state)
-        idle:     if (bin_change) next_state = hundreds; else next_state = idle;
+        idle:     next_state = hundreds; // if (bin_change) next_state = hundreds; else next_state = idle;
         hundreds: next_state = tens;
         tens:     next_state = ones;
         ones:     next_state = idle;
