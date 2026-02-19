@@ -30,6 +30,11 @@ async def test_project(dut):
     dut.ui_in.value  = 0
     dut.uio_in.value = 0
 
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
+    
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 0 in 7-segment
@@ -51,19 +56,17 @@ async def test_project(dut):
     # BCD tens and ones are unchanged
     assert dut.uio_out.value == 0
 
-    # Wait for four clock cycles to see separator
-    await ClockCycles(dut.clk, 4)
-    # Separator in 7-segment
-    assert dut.uo_out.value == 0b10000000
-    # BCD Tens and ones are unchanged
-    assert dut.uio_out.value == 0
-
     # ------------------------------------
 
     # Test conversion of 12
     dut.ui_in.value  = 12
     dut.uio_in.value = 0
 
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
+    
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 0 in 7-segment
@@ -85,19 +88,17 @@ async def test_project(dut):
     # BCD tens and ones are unchanged
     assert dut.uio_out.value == 18
 
-    # Wait for four clock cycles to see separator
-    await ClockCycles(dut.clk, 4)
-    # Separator in 7-segment
-    assert dut.uo_out.value == 0b10000000
-    # BCD tens and ones are unchanged
-    assert dut.uio_out.value == 18
-
     # ------------------------------------
 
     # Test conversion of 77
     dut.ui_in.value  = 77
     dut.uio_in.value = 0
 
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
+ 
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 0 in 7-segment
@@ -119,19 +120,17 @@ async def test_project(dut):
     # BCD tens and ones are unchanged
     assert dut.uio_out.value == 119
 
-    # Wait for four clock cycles to see separator
-    await ClockCycles(dut.clk, 4)
-    # Separator in 7-segment
-    assert dut.uo_out.value == 0b10000000
-    # BCD tens and ones are unchanged
-    assert dut.uio_out.value == 119
-
     # ------------------------------------
 
     # Test conversion of 167
     dut.ui_in.value  = 167
     dut.uio_in.value = 0
 
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
+    
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 1 in 7-segment
@@ -153,20 +152,17 @@ async def test_project(dut):
     # BCD tens and ones are unchanged
     assert dut.uio_out.value == 103
 
-    # Wait for four clock cycles to see separator
-    await ClockCycles(dut.clk, 4)
-    # Separator in 7-segment
-    assert dut.uo_out.value == 0b10000000
-    # BCD tens and ones are unchanged
-    assert dut.uio_out.value == 103
-
     # ------------------------------------
-
 
     # Test conversion of 189
     dut.ui_in.value  = 189
     dut.uio_in.value = 0
 
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
+    
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 1 in 7-segment
@@ -187,19 +183,17 @@ async def test_project(dut):
     assert dut.uo_out.value == 0b01101111;
     # BCD tens and ones only are unchanged
     assert dut.uio_out.value == 137
-
-    # Wait for four clock cycles to see separator
-    await ClockCycles(dut.clk, 4)
-    # Separator in 7-segment
-    assert dut.uo_out.value == 0b10000000
-    # BCD tens and ones only are unchanged
-    assert dut.uio_out.value == 137
    
     # ------------------------------------
    
     # Test conversion of 243
     dut.ui_in.value  = 243
     dut.uio_in.value = 0
+
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
 
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
@@ -222,19 +216,17 @@ async def test_project(dut):
     # BCD tens and ones are unchanged
     assert dut.uio_out.value == 67
 
-    # Wait for four clock cycles to see separator
-    await ClockCycles(dut.clk, 4)
-    # Separator in 7-segment
-    assert dut.uo_out.value == 0b10000000
-    # BCD tens and ones are unchanged
-    assert dut.uio_out.value == 67
-
     # ------------------------------------
    
     # Test conversion of 255
     dut.ui_in.value  = 255
     dut.uio_in.value = 0
 
+    # Wait for four clock cycles to see separator
+    await ClockCycles(dut.clk, 4)
+    # Separator in 7-segment
+    assert dut.uo_out.value == 0b10000000
+    
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 2 in 7-segment
@@ -255,6 +247,8 @@ async def test_project(dut):
     assert dut.uo_out.value == 0b01101101
     # BCD tens and ones only are unchanged
     assert dut.uio_out.value == 85
+
+    # ------------------------------------
 
     # Wait for four clock cycles to see separator
     await ClockCycles(dut.clk, 4)
