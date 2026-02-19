@@ -1,6 +1,6 @@
 The double_dabble main module converts 8-bit binary numbers to decimal numbers
-displayed on a 7-segment display as sequences of 3 BCD digits followed by a decimal point.
-If the binary number is changed outside the time frame of the decimal point the result will temporarily be garbled.
+displayed on a 7-segment display as sequences of 3 BCD digits separated by a decimal point.
+If the binary number is changed the conversion will start over.
 
 The conversion is done with the Double Dabble algoritm where each of the 8 loop iterations uses a 12-bit register
 that can hold 3 groups of 4 bits (that will later become the BCD digits) to implements the core part of the algoritm,
