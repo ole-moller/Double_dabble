@@ -49,18 +49,18 @@ always @ (posedge clk or negedge resetn)
     end
 
 // Detect change in bin input
-// reg bin_change;
-// always @(posedge clk4) next_bin <= bin;
-// assign bin_change = (bin != next_bin);
+reg bin_change;
+always @(posedge clk4) last_bin <= bin;
+assign bin_change = (bin != last_bin);
 
 // States and state variables
 localparam idle = 2'b00, hundreds = 2'b01, tens = 2'b10, ones = 2'b11;
 reg [1:0] state, next_state;
 wire [3:0] bcd_digit;
 
-// Proceed to next state or idle on reset
-always @(posedge clk4 or negedge resetn) begin
-    if (!resetn)
+// Proceed to next state unless the input changes or reset is asserted
+always @(posedge clk4 or negedge resetn or bin_change) begin
+    if (!resetn or bin_change)
         state <= idle;
     else
         state <= next_state;
@@ -69,14 +69,14 @@ always @(posedge clk4 or negedge resetn) begin
 // Select next state
 always @(*) begin
     case (state)
-        idle:     next_state = hundreds; // if (bin_change) next_state = hundreds; else next_state = idle;
+        idle:     next_state = hundreds;
         hundreds: next_state = tens;
         tens:     next_state = ones;
         ones:     next_state = idle;
     endcase
     end
 
-//Select BCD digit to display
+// Select BCD digit to display
 always @(*) begin
     case (state)
         idle:     bcd_digit = 4'b0000;
