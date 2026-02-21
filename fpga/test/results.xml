@@ -1,0 +1,7 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1771669794" />
+    <testcase name="test_digit_cycling" classname="test_seg7_mux" file="/home/jakobsen/work/asic/workspace/tinytapeout_dtu_feb_2026/Double_dabble/fpga/test/test_seg7_mux.py" lineno="23" time="1.7627427577972412" sim_time_ns="999185.001" ratio_time="566835.4027155963" />
+    <testcase name="test_all_segments" classname="test_seg7_mux" file="/home/jakobsen/work/asic/workspace/tinytapeout_dtu_feb_2026/Double_dabble/fpga/test/test_seg7_mux.py" lineno="72" time="0.004166126251220703" sim_time_ns="1850.000999999931" ratio_time="444057.8341709804" />
+  </testsuite>
+</testsuites>
