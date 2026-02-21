@@ -10,8 +10,8 @@ from cocotb.triggers import ClockCycles
 async def test_project(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 250 ms (4 Hz)
-    clock = Clock(dut.clk, 250, units="ms")
+    # Set the clock period to 10 us for simulation speed
+    clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
     # Reset
@@ -166,21 +166,21 @@ async def test_project(dut):
     # Wait for four clock cycles to see hundreds
     await ClockCycles(dut.clk, 4)
     # Hundreds = 1 in 7-segment
-    assert dut.uo_out.value == 0b01011011
+    assert dut.uo_out.value == 0b00000110
     # BCD tens and ones 8*16+9 = 137
     assert dut.uio_out.value == 137
 
     # Wait for four clock cycles to see tens
     await ClockCycles(dut.clk, 4)
     # Tens = 8 in 7-segment
-    assert dut.uo_out.value == 0b01111111;
+    assert dut.uo_out.value == 0b01111111
     # BCD tens and ones are unchanged
     assert dut.uio_out.value == 137
-   
+
     # Wait for four clock cycles to see ones
     await ClockCycles(dut.clk, 4)
     # Ones = 9 in 7-segment
-    assert dut.uo_out.value == 0b01101111;
+    assert dut.uo_out.value == 0b01101111
     # BCD tens and ones only are unchanged
     assert dut.uio_out.value == 137
    
