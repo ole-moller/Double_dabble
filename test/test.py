@@ -157,7 +157,8 @@ async def test_project(dut):
     # Test conversion of 189
     dut.ui_in.value  = 189
     dut.uio_in.value = 0
-
+    print("Testing " dut.ui_in.value)
+  
     # Wait for four clock cycles to see separator
     await ClockCycles(dut.clk, 4)
     # Separator in 7-segment
